@@ -4,29 +4,48 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OutputWriter {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public void writeResultsToJson(List<Result> results, String filePath) throws IOException {
+    // Combined result to hold data for both algorithms
+    public static class CombinedResult {
+        public int graphId;
+        public int vertices;
+        public int edges;
+        public PrimsAlgorithm.Result primResult;
+        // Placeholder for Kruskal's result (to be added in next branch)
+        // public KruskalsAlgorithm.Result kruskalResult;
+
+        public CombinedResult(int graphId, int vertices, int edges, PrimsAlgorithm.Result primResult) {
+            this.graphId = graphId;
+            this.vertices = vertices;
+            this.edges = edges;
+            this.primResult = primResult;
+        }
+    }
+
+    public void writeResultsToJson(List<CombinedResult> results, String filePath) throws IOException {
         ObjectNode rootNode = objectMapper.createObjectNode();
         ArrayNode resultsArray = objectMapper.createArrayNode();
 
-        for (int i = 0; i < results.size(); i++) {
-            Result result = results.get(i);
+        for (CombinedResult result : results) {
             ObjectNode resultNode = objectMapper.createObjectNode();
-            resultNode.put("graph_id", i + 1);
+            resultNode.put("graph_id", result.graphId);
 
             ObjectNode inputStats = objectMapper.createObjectNode();
             inputStats.put("vertices", result.vertices);
             inputStats.put("edges", result.edges);
             resultNode.set("input_stats", inputStats);
 
-            ObjectNode primNode = createAlgorithmNode(result.primEdges, result.primCost, result.primOps, result.primTime);
+            ObjectNode primNode = createAlgorithmNode(result.primResult.mstEdges, result.primResult.totalCost,
+                    result.primResult.operationsCount, result.primResult.executionTimeMs);
             resultNode.set("prim", primNode);
 
-            ObjectNode kruskalNode = createAlgorithmNode(result.kruskalEdges, result.kruskalCost, result.kruskalOps, result.kruskalTime);
+            // Placeholder for Kruskal's node (to be implemented later)
+            ObjectNode kruskalNode = createAlgorithmNode(new ArrayList<>(), 0, 0, 0.0); // Dummy values
             resultNode.set("kruskal", kruskalNode);
 
             resultsArray.add(resultNode);
@@ -51,19 +70,5 @@ public class OutputWriter {
         algNode.put("operations_count", opsCount);
         algNode.put("execution_time_ms", execTime);
         return algNode;
-    }
-
-    // Temporary placeholder class for results (will be refined later)
-    public static class Result {
-        public int vertices;
-        public int edges;
-        public List<Edge> primEdges;
-        public int primCost;
-        public int primOps;
-        public double primTime;
-        public List<Edge> kruskalEdges;
-        public int kruskalCost;
-        public int kruskalOps;
-        public double kruskalTime;
     }
 }
