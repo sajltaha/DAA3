@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class Graph {
-    private final Map<String, List<Edge>> adjacencyList;
+    public final Map<String, List<Edge>> adjacencyList;
 
     public Graph() {
         this.adjacencyList = new HashMap<>();
