@@ -16,14 +16,14 @@ public class OutputWriter {
         public int vertices;
         public int edges;
         public PrimsAlgorithm.Result primResult;
-        // Placeholder for Kruskal's result (to be added in next branch)
-        // public KruskalsAlgorithm.Result kruskalResult;
+        public KruskalsAlgorithm.Result kruskalResult;
 
-        public CombinedResult(int graphId, int vertices, int edges, PrimsAlgorithm.Result primResult) {
+        public CombinedResult(int graphId, int vertices, int edges, PrimsAlgorithm.Result primResult, KruskalsAlgorithm.Result kruskalResult) {
             this.graphId = graphId;
             this.vertices = vertices;
             this.edges = edges;
             this.primResult = primResult;
+            this.kruskalResult = kruskalResult;
         }
     }
 
@@ -44,8 +44,8 @@ public class OutputWriter {
                     result.primResult.operationsCount, result.primResult.executionTimeMs);
             resultNode.set("prim", primNode);
 
-            // Placeholder for Kruskal's node (to be implemented later)
-            ObjectNode kruskalNode = createAlgorithmNode(new ArrayList<>(), 0, 0, 0.0); // Dummy values
+            ObjectNode kruskalNode = createAlgorithmNode(result.kruskalResult.mstEdges, result.kruskalResult.totalCost,
+                    result.kruskalResult.operationsCount, result.kruskalResult.executionTimeMs);
             resultNode.set("kruskal", kruskalNode);
 
             resultsArray.add(resultNode);
