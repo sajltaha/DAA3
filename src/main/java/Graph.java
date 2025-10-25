@@ -44,6 +44,23 @@ public class Graph {
         return dot.toString();
     }
 
+    public boolean isConnected() {
+        if (adjacencyList.isEmpty()) return true;
+        Set<String> visited = new HashSet<>();
+        dfs(getNodes().get(0), visited);
+        return visited.size() == adjacencyList.size();
+    }
+
+    private void dfs(String node, Set<String> visited) {
+        visited.add(node);
+        for (Edge edge : adjacencyList.get(node)) {
+            String neighbor = edge.getTo();
+            if (!visited.contains(neighbor)) {
+                dfs(neighbor, visited);
+            }
+        }
+    }
+
     @Override
     public String toString() {
         return "Graph{nodes=" + adjacencyList.keySet() + ", edges=" + getEdges() + "}";
