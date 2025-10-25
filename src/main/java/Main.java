@@ -5,7 +5,6 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         try {
-            // Standard processing
             InputReader reader = new InputReader();
             List<Graph> graphs = reader.readGraphsFromJson("src/main/resources/input.json");
 
@@ -26,7 +25,6 @@ public class Main {
             OutputWriter writer = new OutputWriter();
             writer.writeResultsToJson(results, "src/main/resources/output.json");
 
-            // Optional performance evaluation
             if (args.length > 0 && args[0].equalsIgnoreCase("eval")) {
                 PerformanceEvaluator evaluator = new PerformanceEvaluator();
                 evaluator.evaluatePerformance(new String[]{"small.json", "medium.json", "large.json", "disconnected.json"});

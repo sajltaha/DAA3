@@ -20,7 +20,6 @@ public class PerformanceEvaluator {
                 PrimsAlgorithm.Result primResult = prim.computeMST(graph);
                 KruskalsAlgorithm.Result kruskalResult = kruskal.computeMST(graph);
 
-                // Prim results
                 csvRows.add(new String[]{
                         path, "Prim", String.valueOf(i + 1),
                         String.valueOf(primResult.totalCost),
@@ -28,7 +27,6 @@ public class PerformanceEvaluator {
                         String.valueOf(primResult.operationsCount)
                 });
 
-                // Kruskal results
                 csvRows.add(new String[]{
                         path, "Kruskal", String.valueOf(i + 1),
                         String.valueOf(kruskalResult.totalCost),

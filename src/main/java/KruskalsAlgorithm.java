@@ -15,7 +15,6 @@ public class KruskalsAlgorithm {
         }
     }
 
-    // Union-Find data structure
     private static class UnionFind {
         private final Map<String, String> parent;
         private final Map<String, Integer> rank;
@@ -31,7 +30,7 @@ public class KruskalsAlgorithm {
 
         public String find(String node) {
             if (!parent.get(node).equals(node)) {
-                parent.put(node, find(parent.get(node))); // Path compression
+                parent.put(node, find(parent.get(node)));
             }
             return parent.get(node);
         }
@@ -62,8 +61,8 @@ public class KruskalsAlgorithm {
         }
 
         List<Edge> allEdges = new ArrayList<>(graph.getEdges());
-        Collections.sort(allEdges); // Sort by weight
-        opsCount += allEdges.size(); // Approximate cost of sorting
+        Collections.sort(allEdges);
+        opsCount += allEdges.size();
 
         UnionFind uf = new UnionFind(new HashSet<>(graph.getNodes()));
         List<Edge> mstEdges = new ArrayList<>();
@@ -72,12 +71,12 @@ public class KruskalsAlgorithm {
         for (Edge edge : allEdges) {
             String root1 = uf.find(edge.getFrom());
             String root2 = uf.find(edge.getTo());
-            opsCount += 2; // Two find operations
+            opsCount += 2;
             if (!root1.equals(root2)) {
                 uf.union(edge.getFrom(), edge.getTo());
                 mstEdges.add(edge);
                 totalCost += edge.getWeight();
-                opsCount += 3; // Union, add to MST, add cost
+                opsCount += 3;
             }
         }
 

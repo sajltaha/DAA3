@@ -3,7 +3,6 @@ import java.util.List;
 import java.util.Set;
 
 public class MstTestUtils {
-    // Check if MST has cycles (using DFS)
     public static boolean hasCycle(List<Edge> mstEdges, List<String> nodes) {
         Graph mstGraph = buildGraphFromEdges(mstEdges, nodes);
         for (String node : nodes) {
@@ -26,7 +25,6 @@ public class MstTestUtils {
         return false;
     }
 
-    // Check if MST is connected
     public static boolean isConnected(List<Edge> mstEdges, List<String> nodes) {
         Graph mstGraph = buildGraphFromEdges(mstEdges, nodes);
         if (nodes.isEmpty()) return true;

@@ -4,13 +4,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class OutputWriter {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    // Combined result to hold data for both algorithms
     public static class CombinedResult {
         public int graphId;
         public int vertices;

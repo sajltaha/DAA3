@@ -21,7 +21,6 @@ public class DatasetGenerator {
         ObjectNode root = mapper.createObjectNode();
         ArrayNode graphsArray = mapper.createArrayNode();
 
-        // Generate 3 graphs per file for variety
         for (int i = 0; i < 3; i++) {
             Graph graph = generateRandomGraph(minVertices + random.nextInt(maxVertices - minVertices + 1), density);
             ObjectNode graphNode = mapper.createObjectNode();
@@ -36,7 +35,7 @@ public class DatasetGenerator {
             ArrayNode edgesArray = mapper.createArrayNode();
             Set<Edge> uniqueEdges = new HashSet<>(graph.getEdges());
             for (Edge edge : uniqueEdges) {
-                if (edge.getFrom().compareTo(edge.getTo()) > 0) continue; // Avoid duplicates in JSON
+                if (edge.getFrom().compareTo(edge.getTo()) > 0) continue;
                 ObjectNode edgeNode = mapper.createObjectNode();
                 edgeNode.put("from", edge.getFrom());
                 edgeNode.put("to", edge.getTo());
@@ -56,18 +55,15 @@ public class DatasetGenerator {
         Graph graph = new Graph();
         List<String> nodes = generateNodeLabels(numVertices);
 
-        // Add nodes
         for (String node : nodes) {
             graph.addNode(node);
         }
 
-        // Create a base connected graph (random MST)
         List<Edge> mstEdges = generateRandomMST(nodes);
         for (Edge edge : mstEdges) {
             graph.addEdge(edge.getFrom(), edge.getTo(), edge.getWeight());
         }
 
-        // Add extra edges based on density
         int extraEdges = calculateExtraEdges(numVertices, density);
         for (int i = 0; i < extraEdges; i++) {
             String from = nodes.get(random.nextInt(numVertices));
@@ -89,12 +85,10 @@ public class DatasetGenerator {
     }
 
     private List<Edge> generateRandomMST(List<String> nodes) {
-        // Simple random tree generation (connect in chain and shuffle)
         List<Edge> mst = new ArrayList<>();
         for (int i = 0; i < nodes.size() - 1; i++) {
             mst.add(new Edge(nodes.get(i), nodes.get(i + 1), 1 + random.nextInt(20)));
         }
-        // Add some random connections to make it tree-like
         for (int i = 0; i < nodes.size() / 2; i++) {
             int idx1 = random.nextInt(nodes.size());
             int idx2 = random.nextInt(nodes.size());
@@ -102,7 +96,7 @@ public class DatasetGenerator {
                 mst.add(new Edge(nodes.get(idx1), nodes.get(idx2), 1 + random.nextInt(20)));
             }
         }
-        return mst; // Note: This is simplistic; for real MST, use algorithms but here it's for generation
+        return mst;
     }
 
     private boolean hasEdge(Graph graph, String from, String to) {
@@ -122,7 +116,6 @@ public class DatasetGenerator {
     }
 
     private void generateDisconnected(String fileName, int numVertices) throws IOException {
-        // Generate two separate connected components
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode root = mapper.createObjectNode();
         ArrayNode graphsArray = mapper.createArrayNode();
@@ -131,19 +124,16 @@ public class DatasetGenerator {
         int half = numVertices / 2;
         List<String> nodes1 = generateNodeLabels(half);
         List<String> nodes2 = generateNodeLabels(numVertices - half);
-        nodes2.replaceAll(s -> "X" + s); // Differentiate labels
+        nodes2.replaceAll(s -> "X" + s);
 
-        // Add components separately
         Graph component1 = generateRandomGraph(half, "medium");
         Graph component2 = generateRandomGraph(numVertices - half, "medium");
 
-        // Merge into one graph (disconnected)
         for (String node : component1.getNodes()) graph.addNode(node);
         for (String node : component2.getNodes()) graph.addNode(node);
         for (Edge edge : component1.getEdges()) graph.addEdge(edge.getFrom(), edge.getTo(), edge.getWeight());
         for (Edge edge : component2.getEdges()) graph.addEdge(edge.getFrom(), edge.getTo(), edge.getWeight());
 
-        // Add to JSON (similar to generateAndSave)
         ObjectNode graphNode = mapper.createObjectNode();
         graphNode.put("id", 1);
         ArrayNode nodesArray = mapper.createArrayNode();

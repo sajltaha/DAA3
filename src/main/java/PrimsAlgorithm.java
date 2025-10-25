@@ -35,17 +35,16 @@ public class PrimsAlgorithm {
         int totalCost = 0;
 
         visited.add(startNode);
-        opsCount++; // Add to visited
+        opsCount++;
 
-        // Add all edges from start node
         for (Edge edge : graph.adjacencyList.get(startNode)) {
             pq.add(edge);
-            opsCount += 2; // Add to PQ + comparison
+            opsCount += 2;
         }
 
         while (!pq.isEmpty() && visited.size() < nodes.size()) {
             Edge minEdge = pq.poll();
-            opsCount += 2; // Poll + comparison
+            opsCount += 2;
 
             String toNode = minEdge.getTo();
             if (visited.contains(toNode)) {
@@ -55,14 +54,13 @@ public class PrimsAlgorithm {
             visited.add(toNode);
             mstEdges.add(minEdge);
             totalCost += minEdge.getWeight();
-            opsCount += 3; // Add visited, add to MST, add cost
+            opsCount += 3;
 
-            // Add adjacent edges of new node
             for (Edge nextEdge : graph.adjacencyList.get(toNode)) {
                 String nextTo = nextEdge.getTo();
                 if (!visited.contains(nextTo)) {
                     pq.add(nextEdge);
-                    opsCount += 3; // Check visited, add to PQ, comparison
+                    opsCount += 3;
                 }
             }
         }

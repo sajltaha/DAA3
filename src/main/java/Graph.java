@@ -15,7 +15,7 @@ public class Graph {
         addNode(from);
         addNode(to);
         adjacencyList.get(from).add(new Edge(from, to, weight));
-        adjacencyList.get(to).add(new Edge(to, from, weight)); // Undirected graph
+        adjacencyList.get(to).add(new Edge(to, from, weight));
     }
 
     public List<String> getNodes() {
@@ -30,7 +30,6 @@ public class Graph {
         return new ArrayList<>(edges);
     }
 
-    // Simple visualization method for bonus (DOT format for graphviz)
     public String toDotFormat() {
         StringBuilder dot = new StringBuilder("graph G {\n");
         for (String node : adjacencyList.keySet()) {
